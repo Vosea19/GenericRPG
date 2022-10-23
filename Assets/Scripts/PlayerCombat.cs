@@ -5,15 +5,11 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
-    public List<Pool> pools;
-    public Dictionary<string, Queue<GameObject>> poolDictionary;
-    [SerializeField]
-    Spell fireBall,iceCone,lightningCube;
     [SerializeField]
     Player player;
-    Camera playerCamera;
     [SerializeField]
-    GameObject fireBallSpell,iceConeSpell,chargeSpell;
+    Spell fireBall, iceCone, lightningCube;
+    Camera playerCamera;
     float timer = 0;
     float lastCastTime = 0;
     public GameObject spellInCharging;
@@ -22,57 +18,23 @@ public class PlayerCombat : MonoBehaviour
     private Vector3 chargeSpellBaseScale;
     private float lastChargeTime = 0;
     private float chargeInterval = 0.1f;
-    private List<GameObject> fireBallList;
-    private List<GameObject> iceConeList;
-    private List<GameObject> lightningCubeList;
     private Animator animator;
     private bool castAnimComplete;
-    private enum Spells {fireball = 0, iceCone = 1, lightningCube = 2};
+    GameManager objectPooler;
+    
 
-    public class Pool
-    {
-        public string tag;
-        public GameObject prefab;
-        public int size;
-    }
+    
     // Start is called before the first frame update
     void Start()
     {
-        
+        objectPooler = GameManager.Instance;
         player = gameObject.GetComponent<Player>();
         if (player == null)
         {
             throw new ArgumentException("PlayerCombat must have a reference to player");
         }
         animator = GetComponent<Animator>();
-        fireBallList = new List<GameObject>();
-        iceConeList = new List<GameObject>();
-        lightningCubeList = new List<GameObject>();
         playerCamera = Camera.main;
-        chargeSpellBaseDamage = lightningCube.damage;
-        poolDictionary = new Dictionary<string, Queue<GameObject>>();
-        foreach (Pool pool in pools)
-        {
-            Queue<GameObject> objectPool = new Queue<GameObject>();
-            for (int i = 0; i < pool.size; i++)
-            {
-                GameObject obj = Instantiate(pool.prefab);
-                obj.SetActive(false);
-                objectPool.Enqueue(obj);
-            }
-            poolDictionary.Add(pool.tag, objectPool);
-        }
-        for (int i = 0; i < 25; i++)
-        {
-            PoolInstantiate(Spells.fireball,transform.position,transform.rotation).SetActive(false);
-            PoolInstantiate(Spells.iceCone, transform.position, transform.rotation).SetActive(false);
-            PoolInstantiate(Spells.lightningCube, transform.position, transform.rotation).SetActive(false);
-            
-        }
-        foreach  (var spell in fireBallList)
-        {
-            Debug.Log(spell);
-        }
     }
     private void Update()
     {
@@ -90,23 +52,25 @@ public class PlayerCombat : MonoBehaviour
         
         if (Input.GetKey(KeyCode.Q) && CastReady(fireBall))
         {
+            
             if (fireBall.multipleProjectiles)
             {
-                CastMultipleSpell(Spells.fireball, fireBall.manaCost, fireBall.distance, fireBall.numOfProjectiles);
+                
+                CastMultipleSpell("fireball", fireBall.manaCost, fireBall.distance, fireBall.numOfProjectiles);
             }
-            else CastSpell(Spells.fireball, fireBall.manaCost, fireBall.distance);
+            else CastSpell("fireball", fireBall.manaCost, fireBall.distance);
         }
         if (Input.GetKey(KeyCode.W) && CastReady(iceCone))
         {
             if (iceCone.multipleProjectiles)
             {
-                CastMultipleSpell(Spells.iceCone, iceCone.manaCost, iceCone.distance, iceCone.numOfProjectiles);
+                CastMultipleSpell("iceCone", iceCone.manaCost, iceCone.distance, iceCone.numOfProjectiles);
             }
-            else CastSpell(Spells.iceCone, iceCone.manaCost, iceCone.distance);
+            else CastSpell("iceCone", iceCone.manaCost, iceCone.distance);
         }
         if (Input.GetKeyDown(KeyCode.E) && CastReady(lightningCube))
         {
-            spellInCharging = StartSpell(Spells.lightningCube, lightningCube.manaCost, lightningCube.distance);
+            spellInCharging = StartSpell("lightningCube", lightningCube.manaCost, lightningCube.distance);
         }
         if (Input.GetKey(KeyCode.E) && ChargeReady(lightningCube) && spellInCharging != null)
         {
@@ -127,26 +91,32 @@ public class PlayerCombat : MonoBehaviour
         return position;
     }
 
-    private void CastSpell(Spells spellType, int spellCost, float spellDistance)
+    private void CastSpell(string spellType, int spellCost, float spellDistance)
     {
-        animator.SetTrigger("Cast");
-        GameObject spell = PoolInstantiate(spellType, transform.position, Quaternion.identity);
+        //animator.SetTrigger("Cast");
+        if (!player.SpendMana(spellCost))
+        {
+            print("out of mana");
+            return;
+        }
+        GameObject spell = objectPooler.PoolInstantiate(spellType, transform.position, Quaternion.identity);
         spell.GetComponent<Projectile>().startMove(GetMouseHit());
         lastCastTime = timer;
     }
-    private GameObject StartSpell(Spells spellType, int spellCost, float spellDistance)
+    private GameObject StartSpell(string spellType, int spellCost, float spellDistance)
     {
         if (!player.SpendMana(spellCost))
         {
 
         }
         
-        GameObject spell = PoolInstantiate(spellType, transform.position, Quaternion.identity);
+       GameObject spell = objectPooler.PoolInstantiate(spellType, transform.position, Quaternion.identity);
         
         lastCastTime = timer;
         channelledProj = spell.GetComponent<Projectile>();
-        chargeSpellBaseScale = chargeSpell.transform.localScale;
+        //chargeSpellBaseScale = chargeSpell.transform.localScale;
         return spell;
+        
     }
     private void ChargeSpell()
     {
@@ -165,13 +135,14 @@ public class PlayerCombat : MonoBehaviour
         lastCastTime = timer;
 
     }
-    private void CastMultipleSpell(Spells spellType, int spellCost, float spellDistance, int numOfSpells)
+    private void CastMultipleSpell(string spellType, int spellCost, float spellDistance, int numOfSpells)
     {
-        animator.SetTrigger("Cast");
+        //animator.SetTrigger("Cast");
         if (!player.SpendMana(spellCost))
         {
+            print("out of mana");
             return;
-        }    
+        }
         Vector3 position = GetMouseHit();
         float distanceScaler = Mathf.Clamp(Vector3.Distance(position,transform.position),1,5);
         int startVal;
@@ -197,74 +168,28 @@ public class PlayerCombat : MonoBehaviour
         for (int i = 0; i < offsets.Length; i++)
         {
            
-                GameObject spell = PoolInstantiate(spellType, transform.position, Quaternion.identity);
-                spell.GetComponent<Projectile>().startMove(position + transform.right * offsets[i] * distanceScaler);
+               GameObject spell = objectPooler.PoolInstantiate(spellType, transform.position, Quaternion.identity);
+            spell.SetActive(true);
+            spell.GetComponent<Projectile>().startMove(position + transform.right * offsets[i] * distanceScaler);
             
         }
         if (numOfSpells % 2 != 0)
         {
-            GameObject spell = PoolInstantiate(spellType, transform.position, Quaternion.identity);
+            GameObject spell = objectPooler.PoolInstantiate(spellType, transform.position, Quaternion.identity);
+            spell.SetActive(true);
             spell.GetComponent<Projectile>().startMove(position);
         }
 
-        
+
         lastCastTime = timer;
     }
-    public GameObject PoolInstantiate(string tag,Vector3 position,Quaternion rotation)
-    {
-        if (!poolDictionary.ContainsKey(tag))
-        {
-            Debug.Log("Pool with tag" + tag + "Doesnt Exist");
-            return null;
-        }
-        GameObject objToSpawn = poolDictionary[tag].Dequeue();
-        objToSpawn.SetActive(true);
-        objToSpawn.transform.SetPositionAndRotation(position,rotation);
-        poolDictionary[tag].Enqueue(objToSpawn);
-        return objToSpawn;
-    }
-    /*
-    private GameObject PoolInstantiate(Spells spell, Vector3 position, Quaternion rotation)
-    {
-        List<GameObject> spellList = null;
-        GameObject spellPrefab = null;
-        switch (spell)
-        {
-            case Spells.fireball:
-                spellList = fireBallList;
-                spellPrefab = fireBallSpell;
-                break;
-            case Spells.iceCone:
-                spellList = iceConeList;
-                spellPrefab = iceConeSpell;
-                break;
-            case Spells.lightningCube:
-                spellList = lightningCubeList;
-                spellPrefab = chargeSpell;
-                break;
-        }
-        foreach (var item in spellList)
-        {
-            if (!item.activeInHierarchy)
-            {
-                item.SetActive(true);
-                item.transform.position = position;
-                item.transform.localScale = spellPrefab.transform.localScale;
-                return item;
-            }
-        }
-        GameObject newSpell = Instantiate(spellPrefab, position, rotation);
-        spellList.Add(newSpell);
-        return newSpell;       
-    }
-    */
     private bool CastReady(Spell spell)
     {
-        return (timer >= lastCastTime + 1f / spell.castTime && player.GetMana() >= spell.manaCost);
+        return (timer >= lastCastTime + 1f / spell.castTime);
     }
     private bool ChargeReady(Spell spell)
     {
-        return (timer >= lastChargeTime + 1f / spell.castTime && player.GetMana() >= spell.manaCost);
+        return (timer >= lastChargeTime + 1f / spell.castTime);
     }
 
 }

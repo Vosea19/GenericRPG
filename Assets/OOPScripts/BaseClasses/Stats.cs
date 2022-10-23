@@ -142,6 +142,10 @@ public abstract class Stats : MonoBehaviour
     #region Stats
     public void SetMana(int newMana)
     {
+        if (newMana <= maxMana)
+        {
+            mana = newMana;
+        }
         if (newMana <= 0)
         {
             mana = 0;
@@ -223,4 +227,5 @@ public abstract class Stats : MonoBehaviour
         return spellDamage;
     }
     #endregion
+  
 }

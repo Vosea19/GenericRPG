@@ -13,12 +13,15 @@ public class Player : Stats
     private Vector3 mousePos;
     private Coroutine moveCoroutine;
 
-   
+    private void Awake()
+    {
+        LoadStats();
+    }
     private void Start()
     {
         playerCamera = Camera.main;
         playerTransform = transform;
-        LoadStats();
+        
     }
     private void Update()
     {
@@ -46,6 +49,7 @@ public class Player : Stats
         SetMaxHealth(statsData.maxHealth);
         SetHealth(statsData.health);
         SetMaxMana(statsData.maxMana);
+        SetMana(statsData.mana);
         SetExperience(statsData.experience);
         SetExpToLevel(statsData.expToLevel);
         SetLevel(statsData.level);
