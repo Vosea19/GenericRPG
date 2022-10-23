@@ -7,6 +7,8 @@ public abstract class Stats : MonoBehaviour
 {
     private int maxHealth;
     private int health;
+    private int maxMana;
+    private int mana;
     private int experience;
     private int expToLevel = 1000;
     private int level;
@@ -20,7 +22,7 @@ public abstract class Stats : MonoBehaviour
     private float actionSpeed;
     private int spellDamage;
     private int attackDamage;
-
+     
     #region Defences
     public void SetHealth(int newHealth)
     {
@@ -93,6 +95,47 @@ public abstract class Stats : MonoBehaviour
     }
     #endregion
     #region Stats
+    public void SetMana(int newMana)
+    {
+        if (newMana <= 0)
+        {
+            mana = 0;
+        }
+    }
+    public int GetMana()
+    {
+        return mana;
+    }
+    public void SetMaxMana(int newMaxMana)
+    {
+        if (newMaxMana >= 0)
+        {
+            maxMana = newMaxMana;
+        }
+        else
+        {
+            throw new ArgumentException("Max Mana Cannot be set to a negative value");
+        }
+        
+    }
+    public int GetMaxMana()
+    {
+        return maxMana;
+    }
+    public bool SpendMana(int manaToSpend)
+    {
+        if (manaToSpend > mana)
+        {
+            return false;
+        }
+        else
+        {
+            SetMana(mana - manaToSpend);
+            return true;
+
+        }
+
+    }
     public void SetDexterity(int newDexterity)
     {
         dexterity = newDexterity >= 0 ? newDexterity : dexterity;
