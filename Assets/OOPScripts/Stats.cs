@@ -85,7 +85,7 @@ public abstract class Stats : MonoBehaviour
     public void LevelUp()
     {
         level = level > 0 && level < maxLevel ? level + 1 : level;
-        expToLevel *= expIncreasePerLevel;
+        expToLevel = Mathf.FloorToInt((float)expToLevel * expIncreasePerLevel);
         if (level == maxLevel)
         {
             canGainExp = false;
