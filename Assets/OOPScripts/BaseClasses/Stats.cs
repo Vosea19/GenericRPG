@@ -62,10 +62,8 @@ public abstract class Stats : MonoBehaviour
         int totalDamage = Mathf.FloorToInt((float)baseDamage * (100f / (100f + (float)armor)));
         SetHealth(health - totalDamage);
     }
-    public void Die()
-    {
-        gameObject.SetActive(false);
-    }
+    public abstract void Die();
+    
     #endregion
     #region Experience
     public void SetExperience(int newExperience)

@@ -6,17 +6,11 @@ public class Npc : Stats
 {
     [SerializeField]
     StatsData statsData;
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
-        LoadStats(); 
+        LoadStats();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
     private void LoadStats()
     {
         SetMaxHealth(statsData.maxHealth);
@@ -31,5 +25,9 @@ public class Npc : Stats
         SetDexterity(statsData.dexterity);
         SetStrength(statsData.strength);
         SetIntelligence(statsData.intelligence);       
+    }
+    override public void Die()
+    {
+        gameObject.SetActive(false);
     }
 }
