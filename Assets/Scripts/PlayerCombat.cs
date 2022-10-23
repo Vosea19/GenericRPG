@@ -14,7 +14,6 @@ public class PlayerCombat : MonoBehaviour
     GameObject fireBallSpell,iceConeSpell,chargeSpell;
     float timer = 0;
     float lastCastTime = 0;
-    Mana mana;
     public GameObject spellInCharging;
     private Projectile channelledProj;
     private int chargeSpellBaseDamage;
@@ -32,6 +31,7 @@ public class PlayerCombat : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = gameObject.GetComponent<Player>();
         if (player == null)
         {
             throw new ArgumentException("PlayerCombat must have a reference to player");
@@ -41,7 +41,6 @@ public class PlayerCombat : MonoBehaviour
         iceConeList = new List<GameObject>();
         lightningCubeList = new List<GameObject>();
         playerCamera = Camera.main;
-        mana = GetComponent<Mana>();
         chargeSpellBaseDamage = lightningCube.damage;
         for (int i = 0; i < 25; i++)
         {
@@ -108,14 +107,18 @@ public class PlayerCombat : MonoBehaviour
     {
         animator.SetTrigger("Cast");
         GameObject spell = PoolInstantiate(spellType, transform.position, Quaternion.identity);
-        mana.currentMana -= spellCost;
         spell.GetComponent<Projectile>().startMove(GetMouseHit());
         lastCastTime = timer;
     }
     private GameObject StartSpell(Spells spellType, int spellCost, float spellDistance)
     {
+        if (!player.SpendMana(spellCost))
+        {
+
+        }
+        
         GameObject spell = PoolInstantiate(spellType, transform.position, Quaternion.identity);
-        mana.currentMana -= spellCost;
+        
         lastCastTime = timer;
         channelledProj = spell.GetComponent<Projectile>();
         chargeSpellBaseScale = chargeSpell.transform.localScale;
@@ -127,7 +130,7 @@ public class PlayerCombat : MonoBehaviour
         channelledProj.channelDamage += (int)Mathf.Ceil(chargeInterval * lightningCube.damage);
         spellInCharging.transform.localScale += (chargeInterval * chargeSpellBaseScale);
         spellInCharging.transform.position = transform.position;
-        mana.currentMana -= (int)Mathf.Ceil(chargeInterval * lightningCube.manaCost);
+        player.SpendMana( (int)Mathf.Ceil(chargeInterval * lightningCube.manaCost));
         lastChargeTime = timer;
 
     }
@@ -141,7 +144,10 @@ public class PlayerCombat : MonoBehaviour
     private void CastMultipleSpell(Spells spellType, int spellCost, float spellDistance, int numOfSpells)
     {
         animator.SetTrigger("Cast");
-            
+        if (!player.SpendMana(spellCost))
+        {
+            return;
+        }    
         Vector3 position = GetMouseHit();
         float distanceScaler = Mathf.Clamp(Vector3.Distance(position,transform.position),1,5);
         int startVal;
@@ -176,8 +182,8 @@ public class PlayerCombat : MonoBehaviour
             GameObject spell = PoolInstantiate(spellType, transform.position, Quaternion.identity);
             spell.GetComponent<Projectile>().startMove(position);
         }
+
         
-        mana.currentMana -= spellCost;
         lastCastTime = timer;
     }
     private GameObject PoolInstantiate(Spells spell, Vector3 position, Quaternion rotation)
@@ -215,11 +221,11 @@ public class PlayerCombat : MonoBehaviour
     }
     private bool CastReady(Spell spell)
     {
-        return (timer >= lastCastTime + 1f / spell.castTime && mana.currentMana >= spell.manaCost);
+        return (timer >= lastCastTime + 1f / spell.castTime && player.GetMana() >= spell.manaCost);
     }
     private bool ChargeReady(Spell spell)
     {
-        return (timer >= lastChargeTime + 1f / spell.castTime && mana.currentMana >= spell.manaCost);
+        return (timer >= lastChargeTime + 1f / spell.castTime && player.GetMana() >= spell.manaCost);
     }
 
 }

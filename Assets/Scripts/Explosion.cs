@@ -5,12 +5,10 @@ using UnityEngine;
 public class Explosion : MonoBehaviour
 {
     private Transform explosionTransform;
-    private Damage damage;
     // Start is called before the first frame update
     void Awake()
     {
         explosionTransform = transform;
-        damage = GetComponent<Damage>();
     }
 
     // Update is called once per frame
@@ -35,9 +33,9 @@ public class Explosion : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<IDamageable>(out IDamageable health))
+        if (other.TryGetComponent<Npc>(out Npc health))
         {
-            health.TakeDamage(damage.damage);
+            health.TakeDamage(10);
         }
         
     }

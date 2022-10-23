@@ -12,7 +12,7 @@ public abstract class Stats : MonoBehaviour
     private int experience;
     private int expToLevel;
     private int level;
-    private int maxLevel;
+    private int maxLevel = 100;
     private bool canGainExp;
     private float expIncreasePerLevel;
     private int armor;
@@ -22,11 +22,17 @@ public abstract class Stats : MonoBehaviour
     private float actionSpeed;
     private int spellDamage;
     private int attackDamage;
-     
+
+    public event EventHandler<OnHealthChangeEventArgs> OnHealthChange;
+    public class OnHealthChangeEventArgs : EventArgs
+    {
+        public GameObject passedObject;
+    }
     #region Defences
     public void SetHealth(int newHealth)
     {
-        health = health <= maxHealth ? health : maxHealth;
+        health = newHealth <= maxHealth ? newHealth : maxHealth;
+        OnHealthChange?.Invoke(this, new OnHealthChangeEventArgs { passedObject = this.gameObject });
         if (health <= 0)
         {
             Die();

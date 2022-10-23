@@ -2,21 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Npc : Stats
 {
     [SerializeField]
     StatsData statsData;
     Transform enemyTransform;
-    Transform playerTransform;
+    public Transform playerTransform;
+    public GameManager gameManager;
+    public GameObject nameplate;
+
+   
     private void Start()
     {
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         enemyTransform = transform;
     }
     private void OnEnable()
     {
         LoadStats();
-        StartCoroutine(Move(playerTransform.position));
+        if (playerTransform != null)
+        {
+            StartCoroutine(Move(playerTransform.position));
+        }
+        
     }
     
     private void LoadStats()
@@ -36,7 +44,9 @@ public class Npc : Stats
     }
     override public void Die()
     {
+        gameManager.enemyQueue.Enqueue(gameObject);
         gameObject.SetActive(false);
+        
     }
     IEnumerator Move(Vector3 point)
     {

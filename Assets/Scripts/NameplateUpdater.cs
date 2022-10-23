@@ -46,19 +46,19 @@ public class NameplateUpdater : MonoBehaviour
             Vector3 viewPos = playerCamera.WorldToViewportPoint(enemy.transform.position);
             if (viewPos.x >= 0 && viewPos.x <= 1 && viewPos.y >= 0 && viewPos.y <= 1 && viewPos.z > 0)
             {
-                if (enemy.TryGetComponent<Health>(out Health enemyHealth) && enemyHealth.nameplate != null)
+                if (enemy.TryGetComponent<Npc>(out Npc enemyHealth) && enemyHealth.nameplate != null)
                 {
                     GameObject currNameplate = enemyHealth.nameplate;
                     enemyHealth.nameplate = currNameplate;
                     RectTransform nameplateReal = currNameplate.GetComponent<RectTransform>();
                     nameplateReal.position = playerCamera.WorldToScreenPoint(enemy.transform.position + Vector3.up * 2);
-                    enemyHealth.SetNameplatePosition(nameplateReal.position);
+                    currNameplate.transform.position = nameplateReal.position;
                 }
                 ;
             }
             else
             {
-                GameObject enemyNameplate = enemy.GetComponent<Health>().nameplate;
+                GameObject enemyNameplate = enemy.GetComponent<Npc>().nameplate;
                 if (enemyNameplate != null)
                 {
                     enemyNameplate.SetActive(false);
@@ -74,12 +74,12 @@ public class NameplateUpdater : MonoBehaviour
             if (child.gameObject.activeInHierarchy && enemies.Contains(child.gameObject) == false)
             {
                 enemies.Add(child.gameObject);
-                child.GetComponent<Health>().OnHealthChange += UpdateNameplate;                
+                child.GetComponent<Npc>().OnHealthChange += UpdateNameplate;                
             }
             if (child.gameObject.activeInHierarchy == false && enemies.Contains(child.gameObject) == true)
             {
                 enemies.Remove(child.gameObject);
-                child.GetComponent<Health>().OnHealthChange -= UpdateNameplate;
+                child.GetComponent<Npc>().OnHealthChange -= UpdateNameplate;
 
             }
         }
@@ -97,12 +97,12 @@ public class NameplateUpdater : MonoBehaviour
         }
         return null;
     }
-    private void UpdateNameplate(object sender, Health.OnHealthChangeEventArgs e)
+    private void UpdateNameplate(object sender, Npc.OnHealthChangeEventArgs e)
     {
         Vector3 viewPos = playerCamera.WorldToViewportPoint(e.passedObject.transform.position);
         if (viewPos.x >= 0 && viewPos.x <= 1 && viewPos.y >= 0 && viewPos.y <= 1 && viewPos.z > 0)
         {
-            if (e.passedObject.TryGetComponent<Health>(out Health enemyHealth))
+            if (e.passedObject.TryGetComponent<Npc>(out Npc enemyHealth))
             {
                 GameObject currNameplate = enemyHealth.nameplate;
                 if (e.passedObject.activeInHierarchy)
@@ -123,48 +123,6 @@ public class NameplateUpdater : MonoBehaviour
             ;
         }
     }
-    /*
-      Vector3 viewPos = playerCamera.WorldToViewportPoint(enemy.transform.position);
-            if (viewPos.x >= 0 && viewPos.x <= 1 && viewPos.y >= 0 && viewPos.y <= 1 && viewPos.z > 0)
-            {
-                if (enemy.TryGetComponent<Health>(out Health enemyHealth))
-                {
-                    GameObject currNameplate = enemyHealth.nameplate;
-                    if (enemy.activeInHierarchy)
-                    {
-                        if (enemyCount > nameplates.Count)
-                        {
-                            GameObject nameplate = Instantiate(enemyNameplate, UI.transform);
-                            nameplates.Add(nameplate);
-                            enemyCount++;
-                        }
-                        if (enemyHealth.nameplate == null)
-                        {
-                            currNameplate = CheckNameplates();
-                        }
-
-                        enemyHealth.nameplate = currNameplate;
-                        RectTransform nameplateReal = currNameplate.GetComponent<RectTransform>();
-                        nameplateReal.position = playerCamera.WorldToScreenPoint(enemy.transform.position + Vector3.up * 2);
-                        enemyHealth.SetNameplatePosition(nameplateReal.position);
-                        currNameplate.transform.GetChild(0).GetComponent<Image>().fillAmount = (float)enemyHealth.GetHealth() / (float)enemyHealth.GetMaxHealth();
-                        currNameplate.transform.GetChild(1).GetComponent<Text>().text = enemyHealth.GetHealth().ToString() + "/" + enemyHealth.GetMaxHealth().ToString();
-                        currNameplate.SetActive(true);
-
-                    }
-                    else nameplates[enemyCount].SetActive(false);
-                }
-                ;
-            }
-            else
-            {
-
-                if (enemy.TryGetComponent<Health>(out Health nameplateDisable) && nameplateDisable.nameplate != null)
-                {
-                    nameplateDisable.nameplate.SetActive(false);
-                }
-                
-            }
-     * */
+    
 }
 

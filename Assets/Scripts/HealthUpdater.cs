@@ -8,7 +8,7 @@ public class HealthUpdater : MonoBehaviour
     public GameObject player;
     private Image healthBar;
     private Text healthText;
-    private Health playerHealth;
+    private Player playerHealth;
     private Camera playerCamera;
     // Start is called before the first frame update
     void Start()
@@ -16,7 +16,7 @@ public class HealthUpdater : MonoBehaviour
         playerCamera = Camera.main;
         healthBar = GetComponent<Image>();
         healthText = transform.GetChild(0).GetComponent<Text>();
-        playerHealth = player.GetComponent<Health>();
+        playerHealth = player.GetComponent<Player>();
     }
 
     // Update is called once per frame

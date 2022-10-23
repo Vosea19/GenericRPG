@@ -122,10 +122,7 @@ public class Projectile : MonoBehaviour
                 Debug.Log(chainsLeft);
                 break;
             }
-
         }
-
-
     }
     private void TargetInteraction(GameObject target)
     {

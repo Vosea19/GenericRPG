@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Player : Stats
 {
@@ -11,8 +12,11 @@ public class Player : Stats
     private Transform playerTransform;
     private Vector3 mousePos;
     private Coroutine moveCoroutine;
+
+   
     private void Start()
     {
+        playerCamera = Camera.main;
         playerTransform = transform;
         LoadStats();
     }

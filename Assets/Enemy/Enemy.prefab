@@ -12,11 +12,8 @@ GameObject:
   - component: {fileID: 5975163120302097174}
   - component: {fileID: 5975163120302097175}
   - component: {fileID: 5975163120302097172}
-  - component: {fileID: 5975163120302097173}
-  - component: {fileID: 5975163120302097176}
-  - component: {fileID: 5975163120302097179}
-  - component: {fileID: 5975163120302097178}
   - component: {fileID: 1728296025}
+  - component: {fileID: 6654487539681922895}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Harmful
@@ -104,63 +101,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!114 &5975163120302097173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5975163120302097170}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05e35d8aa9bdc51469301fef65aa4660, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 6
---- !u!114 &5975163120302097176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5975163120302097170}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0aad54a229b33d1498214d434ae1d4dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  aggroRadius: 50
---- !u!54 &5975163120302097179
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5975163120302097170}
-  serializedVersion: 2
-  m_Mass: 0.0000001
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 116
-  m_CollisionDetection: 3
---- !u!114 &5975163120302097178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5975163120302097170}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a608cace2e5c1db4490fa93122b0116f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damageText: {fileID: 5904583191914248473, guid: 353dcdc4c0e358349b8074de9f80dd77,
-    type: 3}
-  nameplate: {fileID: 0}
 --- !u!114 &1728296025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,3 +115,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinObject: {fileID: 1632412302927290996, guid: 21f18353c3e88034a8d189d1f235f52e,
     type: 3}
+--- !u!114 &6654487539681922895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5975163120302097170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b76a51a176eaa9941b570663641ddbb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statsData: {fileID: 11400000, guid: 00969132fc747bc4a8dc03d60eb1e539, type: 2}
+  playerTransform: {fileID: 0}
+  gameManager: {fileID: 0}
+  nameplate: {fileID: 0}
