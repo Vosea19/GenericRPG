@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
+    public List<Pool> pools;
+    public Dictionary<string, Queue<GameObject>> poolDictionary;
     [SerializeField]
     Spell fireBall,iceCone,lightningCube;
     [SerializeField]
@@ -27,10 +29,16 @@ public class PlayerCombat : MonoBehaviour
     private bool castAnimComplete;
     private enum Spells {fireball = 0, iceCone = 1, lightningCube = 2};
 
-    
+    public class Pool
+    {
+        public string tag;
+        public GameObject prefab;
+        public int size;
+    }
     // Start is called before the first frame update
     void Start()
     {
+        
         player = gameObject.GetComponent<Player>();
         if (player == null)
         {
@@ -42,13 +50,29 @@ public class PlayerCombat : MonoBehaviour
         lightningCubeList = new List<GameObject>();
         playerCamera = Camera.main;
         chargeSpellBaseDamage = lightningCube.damage;
+        poolDictionary = new Dictionary<string, Queue<GameObject>>();
+        foreach (Pool pool in pools)
+        {
+            Queue<GameObject> objectPool = new Queue<GameObject>();
+            for (int i = 0; i < pool.size; i++)
+            {
+                GameObject obj = Instantiate(pool.prefab);
+                obj.SetActive(false);
+                objectPool.Enqueue(obj);
+            }
+            poolDictionary.Add(pool.tag, objectPool);
+        }
         for (int i = 0; i < 25; i++)
         {
             PoolInstantiate(Spells.fireball,transform.position,transform.rotation).SetActive(false);
             PoolInstantiate(Spells.iceCone, transform.position, transform.rotation).SetActive(false);
             PoolInstantiate(Spells.lightningCube, transform.position, transform.rotation).SetActive(false);
+            
         }
-       
+        foreach  (var spell in fireBallList)
+        {
+            Debug.Log(spell);
+        }
     }
     private void Update()
     {
@@ -186,6 +210,20 @@ public class PlayerCombat : MonoBehaviour
         
         lastCastTime = timer;
     }
+    public GameObject PoolInstantiate(string tag,Vector3 position,Quaternion rotation)
+    {
+        if (!poolDictionary.ContainsKey(tag))
+        {
+            Debug.Log("Pool with tag" + tag + "Doesnt Exist");
+            return null;
+        }
+        GameObject objToSpawn = poolDictionary[tag].Dequeue();
+        objToSpawn.SetActive(true);
+        objToSpawn.transform.SetPositionAndRotation(position,rotation);
+        poolDictionary[tag].Enqueue(objToSpawn);
+        return objToSpawn;
+    }
+    /*
     private GameObject PoolInstantiate(Spells spell, Vector3 position, Quaternion rotation)
     {
         List<GameObject> spellList = null;
@@ -219,6 +257,7 @@ public class PlayerCombat : MonoBehaviour
         spellList.Add(newSpell);
         return newSpell;       
     }
+    */
     private bool CastReady(Spell spell)
     {
         return (timer >= lastCastTime + 1f / spell.castTime && player.GetMana() >= spell.manaCost);

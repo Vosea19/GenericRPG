@@ -762,6 +762,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcPrefab: {fileID: 5975163120302097170, guid: 640c59e36b58867409df7708c710cdcd,
     type: 3}
+  playerTransform: {fileID: 543450652826742565}
 --- !u!4 &969439331
 Transform:
   m_ObjectHideFlags: 0

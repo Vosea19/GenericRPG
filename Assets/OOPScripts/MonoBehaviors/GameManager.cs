@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     GameObject npcPrefab;
     GameObject enemiesList;
     Transform spawnerTransform;
-    private Transform playerTransform;
+    public Transform playerTransform;
     public Queue<GameObject> enemyQueue;
     //
     private void Awake()
@@ -20,11 +20,12 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(transform);
         spawnerTransform = transform;
         enemyQueue = new Queue<GameObject>();
+        enemiesList = GameObject.Find("EnemiesList");
+        //playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
     }
     private void Start()
     {
-        enemiesList = GameObject.Find("EnemiesList");
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        
         StartCoroutine(SpawnLoop(enemiesList,npcPrefab,2f));
     }
     void Update()
