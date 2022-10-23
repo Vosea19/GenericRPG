@@ -21,6 +21,16 @@ public class Loot : MonoBehaviour
             coins++;
         }
     }
+    private void OnEnable()
+    {
+        for (int i = 0; i < Random.Range(1, 10); i++)
+        {
+            //GameObject coin = Instantiate(coinObject, transform);
+            //coin.SetActive(false);
+            //loot.Add(coin);
+            coins++;
+        }
+    }
 
     // Update is called once per frame
     void Update()

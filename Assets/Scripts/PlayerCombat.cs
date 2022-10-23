@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,8 @@ public class PlayerCombat : MonoBehaviour
 {
     [SerializeField]
     Spell fireBall,iceCone,lightningCube;
+    [SerializeField]
+    Player player;
     Camera playerCamera;
     [SerializeField]
     GameObject fireBallSpell,iceConeSpell,chargeSpell;
@@ -29,6 +32,10 @@ public class PlayerCombat : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (player == null)
+        {
+            throw new ArgumentException("PlayerCombat must have a reference to player");
+        }
         animator = GetComponent<Animator>();
         fireBallList = new List<GameObject>();
         iceConeList = new List<GameObject>();

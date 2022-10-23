@@ -28,7 +28,6 @@ public class EnemyAI : MonoBehaviour
             }
             moveCo = StartCoroutine(Move(nearestPlayer.position));
         }
-
     }
 
     IEnumerator Move(Vector3 point)
@@ -40,8 +39,6 @@ public class EnemyAI : MonoBehaviour
         for (int i = 0; i < steps; i++)
         {
             rb.MovePosition(enemyTransform.position + (scaledVector * speed));
-            //yield return new WaitForSeconds(0.02f);
-            //yield return new WaitForEndOfFrame();
             yield return new WaitForFixedUpdate();
         }
         rb.velocity = Vector3.zero;
@@ -57,11 +54,8 @@ public class EnemyAI : MonoBehaviour
                 {
                     nearestPlayer = players[0].transform;
                 }
-                
-
             }
             yield return new WaitForSeconds(.25f);
-
         }
     }
 }
