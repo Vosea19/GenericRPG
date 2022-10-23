@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 179e688a8b379144cbf11e9a85693e99, type: 3}
+  m_Name: Fireball
+  m_EditorClassIdentifier: 
+  damage: 15
+  castTime: 1
+  distance: 25
+  speed: 1
+  manaCost: 6
+  chainDistance: 10
+  numChains: 0
+  multipleProjectiles: 1
+  numOfProjectiles: 3
+  projectileMechanic: 0
