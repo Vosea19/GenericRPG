@@ -10,11 +10,11 @@ public abstract class Stats : MonoBehaviour
     private int maxMana;
     private int mana;
     private int experience;
-    private int expToLevel = 1000;
+    private int expToLevel;
     private int level;
     private int maxLevel;
-    private bool canGainExp = true;
-    private float expIncreasePerLevel = 1.2f;
+    private bool canGainExp;
+    private float expIncreasePerLevel;
     private int armor;
     private int dexterity;
     private int strength;
@@ -93,6 +93,47 @@ public abstract class Stats : MonoBehaviour
             canGainExp = false;
         }
     }
+    public void SetLevel(int newLevel)
+    {
+        if (newLevel > maxLevel || newLevel <= 0)
+        {
+            throw new ArgumentException("Level cannot exceed MaxLevel or be less than 1");
+        }
+        level = newLevel;
+    }
+    public int GetMaxLevel()
+    {
+        return maxLevel;
+    }
+    public void SetMaxLevel(int newMaxLevel)
+    {
+        if (newMaxLevel < level || newMaxLevel <= 0)
+        {
+            throw new ArgumentException("MaxLevel cannot be less than currentLevel or less than 1");
+        }
+        maxLevel = newMaxLevel;
+    }
+    public int GetLevel()
+    {
+        return level;
+    }
+    public void SetExpToLevel(int newExpToLevel)
+    {
+        if (newExpToLevel <=0)
+        {
+            throw new ArgumentException("ExpToLevel cannot be less than 1");
+        }
+        expToLevel = newExpToLevel;
+    }
+    public void SetCanGainEXP(bool newCanGainExp)
+    {
+        canGainExp = newCanGainExp;
+    }
+    public bool GetCanGainEXP()
+    {
+        return canGainExp;
+    }
+
     #endregion
     #region Stats
     public void SetMana(int newMana)
