@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
     private int maxHealth;
     private int health;
     private int armor;
-
+    public GameObject nameplate;
 
     public event EventHandler<OnHealthChangeEventArgs> OnHealthChange;
     public class OnHealthChangeEventArgs : EventArgs
@@ -19,6 +20,7 @@ public class Health : MonoBehaviour
     {
         health = newHealth <= maxHealth ? newHealth : maxHealth;
         OnHealthChange?.Invoke(this, new OnHealthChangeEventArgs { passedObject = this.gameObject });
+        UpdateNameplate();
         if (health <= 0)
         {
             Die();
@@ -56,6 +58,21 @@ public class Health : MonoBehaviour
     }
     public void Die()
     {
+        if (nameplate != null)
+        {
+            print("Got to 1");
+            nameplate.SetActive(false);
+            //nameplate = null;
+        }
+        print("Got to 2");
         gameObject.SetActive(false);
+    }
+    public void UpdateNameplate()
+    {
+        if (nameplate!=null && nameplate.activeInHierarchy)
+        {
+            nameplate.transform.GetChild(0).GetComponent<Image>().fillAmount = (float)GetHealth() / (float)GetMaxHealth();
+            nameplate.transform.GetChild(1).GetComponent<Text>().text = GetHealth().ToString() + "/" + GetMaxHealth().ToString();
+        }
     }
 }

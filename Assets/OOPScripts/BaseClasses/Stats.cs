@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Stats : MonoBehaviour
+public class Stats : MonoBehaviour
 {
     private int dexterity;
     private int strength;

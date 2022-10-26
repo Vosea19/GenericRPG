@@ -32,7 +32,6 @@ public class NameplateUpdater : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         timer += Time.deltaTime;
@@ -40,25 +39,27 @@ public class NameplateUpdater : MonoBehaviour
         {
             FindEnemies();
         }
-        //int enemyCount = enemies.Count;
         foreach (var enemy in enemies)
         {
             Vector3 viewPos = playerCamera.WorldToViewportPoint(enemy.transform.position);
             if (viewPos.x >= 0 && viewPos.x <= 1 && viewPos.y >= 0 && viewPos.y <= 1 && viewPos.z > 0)
             {
-                if (enemy.TryGetComponent<Npc>(out Npc enemyHealth) && enemyHealth.nameplate != null)
+                if (enemy.TryGetComponent<Npc>(out Npc enemyNpc))
                 {
-                    GameObject currNameplate = enemyHealth.nameplate;
-                    enemyHealth.nameplate = currNameplate;
-                    RectTransform nameplateReal = currNameplate.GetComponent<RectTransform>();
-                    nameplateReal.position = playerCamera.WorldToScreenPoint(enemy.transform.position + Vector3.up * 2);
-                    currNameplate.transform.position = nameplateReal.position;
+                    if (enemyNpc.Health.nameplate == null)
+                    {
+                        enemyNpc.Health.nameplate = CheckNameplates();
+
+                    }
+                    RectTransform nameplateRec = enemyNpc.Health.nameplate.GetComponent<RectTransform>();
+                    nameplateRec.position = playerCamera.WorldToScreenPoint(enemy.transform.position + Vector3.up * 2);
+                    enemyNpc.Health.nameplate.SetActive(true);
                 }
                 ;
             }
             else
             {
-                GameObject enemyNameplate = enemy.GetComponent<Npc>().nameplate;
+                GameObject enemyNameplate = enemy.GetComponent<Npc>().Health.nameplate;
                 if (enemyNameplate != null)
                 {
                     enemyNameplate.SetActive(false);
@@ -74,18 +75,18 @@ public class NameplateUpdater : MonoBehaviour
             if (child.gameObject.activeInHierarchy && enemies.Contains(child.gameObject) == false)
             {
                 enemies.Add(child.gameObject);
-                child.GetComponent<Health>().OnHealthChange += UpdateNameplate;                
+                //child.GetComponent<Health>().OnHealthChange += UpdateNameplate;                
             }
             if (child.gameObject.activeInHierarchy == false && enemies.Contains(child.gameObject) == true)
             {
                 enemies.Remove(child.gameObject);
-                child.GetComponent<Health>().OnHealthChange -= UpdateNameplate;
+                //child.GetComponent<Health>().OnHealthChange -= UpdateNameplate;
 
             }
         }
         lastEnemyCheck = timer;
     }
-    GameObject CheckNameplates()
+   public GameObject CheckNameplates()
     {
         foreach (var nameplate in nameplates)
         {
@@ -97,6 +98,7 @@ public class NameplateUpdater : MonoBehaviour
         }
         return null;
     }
+    /*
     private void UpdateNameplate(object sender, Health.OnHealthChangeEventArgs e)
     {
         Vector3 viewPos = playerCamera.WorldToViewportPoint(e.passedObject.transform.position);
@@ -119,6 +121,6 @@ public class NameplateUpdater : MonoBehaviour
             ;
         }
     }
-    
+    */
 }
 

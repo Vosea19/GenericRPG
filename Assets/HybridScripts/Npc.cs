@@ -10,18 +10,18 @@ public class Npc : MonoBehaviour
     Transform enemyTransform;
     public Transform playerTransform;
     public GameManager gameManager;
-    public GameObject nameplate;
     public Movement Movement;
     public Health Health;
     public Experience Experience;
     public Stats Stats;
     private void Start()
     {
-        playerTransform = gameManager.playerTransform;
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         enemyTransform = transform;
     }
     private void OnEnable()
     {
+        
         LoadStats();
         if (playerTransform != null)
         {
@@ -37,12 +37,19 @@ public class Npc : MonoBehaviour
         Experience.SetLevel(statsData.level);
         Experience.SetMaxLevel(statsData.maxLevel);
         Experience.SetExperience(statsData.experience);
-        Experience.SetCanGainEXP(statsData.canGainExp);      
+        Experience.SetCanGainEXP(statsData.canGainExp);
+        Stats.SetDexterity(statsData.dexterity);
+        Stats.SetStrength(statsData.strength);
+        Stats.SetIntelligence(statsData.intelligence);
     }
     public void Die()
     {
-        gameManager.enemyQueue.Enqueue(gameObject);
-        gameObject.SetActive(false);
         
+        //gameObject.SetActive(false);
+        
+    }
+    private void OnDisable()
+    {
+        gameManager.enemyQueue.Enqueue(gameObject);
     }
 }

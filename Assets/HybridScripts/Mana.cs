@@ -7,6 +7,11 @@ public class Mana : MonoBehaviour
     private int maxMana;
     private int mana;
 
+    public event EventHandler<OnManaChangeEventArgs> OnManaChange;
+    public class OnManaChangeEventArgs : EventArgs
+    {
+        public GameObject passedObject;
+    }
     public void SetMana(int newMana)
     {
         if (newMana <= maxMana)
@@ -17,6 +22,7 @@ public class Mana : MonoBehaviour
         {
             mana = 0;
         }
+        OnManaChange?.Invoke(this, new OnManaChangeEventArgs { passedObject = this.gameObject });
     }
     public int GetMana()
     {

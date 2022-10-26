@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
             if (Physics.Raycast(spawnerTransform.position, Vector3.down, out RaycastHit hitInfo, 10f))
             {
                 GameObject newEnemy = PoolInstantiate("Enemy", hitInfo.point, Quaternion.identity);
-                //newEnemy.transform.parent = enemiesList.transform;
+                newEnemy.transform.parent = enemiesList.transform;
             }                
             yield return new WaitForSeconds(delay);
         }
@@ -86,6 +86,10 @@ public class GameManager : MonoBehaviour
         }
         GameObject objToSpawn = poolDictionary[tag].Dequeue();
         objToSpawn.SetActive(true);
+        if (objToSpawn.TryGetComponent<Npc>(out Npc newNpc))
+        {
+            newNpc.gameManager = this;
+        }
         objToSpawn.transform.SetPositionAndRotation(position, rotation);
         poolDictionary[tag].Enqueue(objToSpawn);
         return objToSpawn;
