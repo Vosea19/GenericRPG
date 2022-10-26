@@ -69,8 +69,12 @@ public class Health : MonoBehaviour
     }
     public void UpdateNameplate()
     {
-        if (nameplate!=null && nameplate.activeInHierarchy)
+        if (nameplate!=null)
         {
+            if (!nameplate.activeInHierarchy)
+            {
+                nameplate.SetActive(true);
+            }
             nameplate.transform.GetChild(0).GetComponent<Image>().fillAmount = (float)GetHealth() / (float)GetMaxHealth();
             nameplate.transform.GetChild(1).GetComponent<Text>().text = GetHealth().ToString() + "/" + GetMaxHealth().ToString();
         }

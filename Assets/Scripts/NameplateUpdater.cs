@@ -44,7 +44,7 @@ public class NameplateUpdater : MonoBehaviour
             Vector3 viewPos = playerCamera.WorldToViewportPoint(enemy.transform.position);
             if (viewPos.x >= 0 && viewPos.x <= 1 && viewPos.y >= 0 && viewPos.y <= 1 && viewPos.z > 0)
             {
-                if (enemy.TryGetComponent<Npc>(out Npc enemyNpc))
+                if (enemy.TryGetComponent<Npc>(out Npc enemyNpc) && enemy.activeInHierarchy)
                 {
                     if (enemyNpc.Health.nameplate == null)
                     {
@@ -53,7 +53,7 @@ public class NameplateUpdater : MonoBehaviour
                     }
                     RectTransform nameplateRec = enemyNpc.Health.nameplate.GetComponent<RectTransform>();
                     nameplateRec.position = playerCamera.WorldToScreenPoint(enemy.transform.position + Vector3.up * 2);
-                    enemyNpc.Health.nameplate.SetActive(true);
+                    //enemyNpc.Health.nameplate.SetActive(true);
                 }
                 ;
             }

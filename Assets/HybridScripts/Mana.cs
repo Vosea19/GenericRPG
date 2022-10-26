@@ -12,11 +12,19 @@ public class Mana : MonoBehaviour
     {
         public GameObject passedObject;
     }
+    private void Start()
+    {
+        StartCoroutine(RegenMana());
+    }
     public void SetMana(int newMana)
     {
         if (newMana <= maxMana)
         {
             mana = newMana;
+        }
+        if (newMana >= maxMana)
+        {
+            mana = maxMana;
         }
         if (newMana <= 0)
         {
@@ -57,5 +65,14 @@ public class Mana : MonoBehaviour
 
         }
 
+    }
+    IEnumerator RegenMana()
+    {
+        while (true)
+        {
+            SetMana(GetMana() + 5);
+            yield return new WaitForSeconds(1f);
+        }
+        
     }
 }
