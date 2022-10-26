@@ -94,7 +94,7 @@ public class PlayerCombat : MonoBehaviour
     private void CastSpell(string spellType, int spellCost, float spellDistance)
     {
         //animator.SetTrigger("Cast");
-        if (!player.SpendMana(spellCost))
+        if (!player.Mana.SpendMana(spellCost))
         {
             print("out of mana");
             return;
@@ -105,7 +105,7 @@ public class PlayerCombat : MonoBehaviour
     }
     private GameObject StartSpell(string spellType, int spellCost, float spellDistance)
     {
-        if (!player.SpendMana(spellCost))
+        if (!player.Mana.SpendMana(spellCost))
         {
 
         }
@@ -124,7 +124,7 @@ public class PlayerCombat : MonoBehaviour
         channelledProj.channelDamage += (int)Mathf.Ceil(chargeInterval * lightningCube.damage);
         spellInCharging.transform.localScale += (chargeInterval * chargeSpellBaseScale);
         spellInCharging.transform.position = transform.position;
-        player.SpendMana( (int)Mathf.Ceil(chargeInterval * lightningCube.manaCost));
+        player.Mana.SpendMana( (int)Mathf.Ceil(chargeInterval * lightningCube.manaCost));
         lastChargeTime = timer;
 
     }
@@ -138,7 +138,7 @@ public class PlayerCombat : MonoBehaviour
     private void CastMultipleSpell(string spellType, int spellCost, float spellDistance, int numOfSpells)
     {
         //animator.SetTrigger("Cast");
-        if (!player.SpendMana(spellCost))
+        if (!player.Mana.SpendMana(spellCost))
         {
             print("out of mana");
             return;

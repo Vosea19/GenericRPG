@@ -130,7 +130,7 @@ public class Projectile : MonoBehaviour
         {
 
             hitEnemies.Add(target);
-            npc.TakeDamage(SpellHit());
+            npc.Health.TakeDamage(SpellHit());
         }
     }
 }

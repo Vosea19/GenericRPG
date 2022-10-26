@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
         enemyQueue = new Queue<GameObject>();
         poolList = GameObject.Find("PoolList");
         enemiesList = GameObject.Find("EnemiesList");
-        //playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
     }
     private void Start()
     {

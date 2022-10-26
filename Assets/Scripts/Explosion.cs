@@ -24,9 +24,9 @@ public class Explosion : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<Npc>(out Npc health))
+        if (other.TryGetComponent<Npc>(out Npc npc))
         {
-            health.TakeDamage(10);
+            npc.Health.TakeDamage(10);
         }
         
     }
