@@ -64,29 +64,6 @@ public class GameManager : MonoBehaviour
             else SceneManager.LoadScene(optionsScene,LoadSceneMode.Additive); 
         }
     }
-    /*
-    private GameObject PoolInstantiate(GameObject enemyPrefab, Vector3 position, Quaternion rotation)
-    {
-
-        if (enemyQueue.Count != 0)
-        {
-            GameObject newEnemy = enemyQueue.Dequeue();
-            newEnemy.transform.SetPositionAndRotation(position,rotation);
-            newEnemy.transform.localScale = enemyPrefab.transform.localScale;
-            newEnemy.SetActive(true);
-            return newEnemy;
-        }
-        else
-        {
-            GameObject newEnemy = Instantiate(enemyPrefab, position, rotation);
-            Npc newEnemyNpc = newEnemy.GetComponent<Npc>();
-            newEnemyNpc.gameManager = this;
-            newEnemyNpc.playerTransform = playerTransform;
-            
-            return newEnemy;
-        }
-    }
-    */
     IEnumerator SpawnLoop(GameObject enemiesList, GameObject enemy, float delay)
     {
         while (true)

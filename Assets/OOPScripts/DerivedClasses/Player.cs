@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(Mana))]
+[RequireComponent(typeof(Experience))]
+[RequireComponent(typeof(Stats))]
+//[RequireComponent(typeof(Health))]
+//[RequireComponent(typeof(Health))]
+//[RequireComponent(typeof(Health))]
+
 public class Player : Stats
 {
     [SerializeField]

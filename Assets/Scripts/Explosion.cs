@@ -5,16 +5,9 @@ using UnityEngine;
 public class Explosion : MonoBehaviour
 {
     private Transform explosionTransform;
-    // Start is called before the first frame update
     void Awake()
     {
         explosionTransform = transform;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
     public void StartExplode(float radius)
     {
@@ -22,14 +15,12 @@ public class Explosion : MonoBehaviour
     }
     IEnumerator Explode(float radius)
     {
-        
         for (int i = 0; i < (int)(radius); i++)
         {
             explosionTransform.localScale += (Vector3.one * 2);
             yield return new WaitForEndOfFrame();
         }
-        Destroy(explosionTransform.gameObject);
-        
+        Destroy(explosionTransform.gameObject);     
     }
     private void OnTriggerEnter(Collider other)
     {
