@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
-    private int maxHealth;
-    private int health;
+    private int maxHealth = 100;
+    private int health = 100;
     private int armor;
     public GameObject nameplate;
 

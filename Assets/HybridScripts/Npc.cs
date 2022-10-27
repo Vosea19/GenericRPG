@@ -16,17 +16,14 @@ public class Npc : MonoBehaviour
     public Stats Stats;
     private void Start()
     {
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        
         enemyTransform = transform;
     }
     private void OnEnable()
     {
-        
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         LoadStats();
-        if (playerTransform != null)
-        {
-            Movement.StartMove(playerTransform.position, Stats.GetActionSpeed()) ;
-        }    
+        StartCoroutine(Moving());
     }
     private void LoadStats()
     {
@@ -51,5 +48,14 @@ public class Npc : MonoBehaviour
     private void OnDisable()
     {
         gameManager.enemyQueue.Enqueue(gameObject);
+    }
+    IEnumerator Moving()
+    {
+        while (true)
+        {
+            Movement.StartMove(playerTransform.position, Stats.GetActionSpeed());
+            yield return new WaitForSeconds(.1f);
+        }
+        
     }
 }

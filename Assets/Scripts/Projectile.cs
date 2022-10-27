@@ -132,5 +132,9 @@ public class Projectile : MonoBehaviour
             hitEnemies.Add(target);
             npc.Health.TakeDamage(SpellHit());
         }
+        else if (target.transform.TryGetComponent(out Health health))
+        {
+            health.TakeDamage(100);
+        }
     }
 }
