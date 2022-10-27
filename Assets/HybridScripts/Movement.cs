@@ -25,13 +25,13 @@ public class Movement : MonoBehaviour
     {
         cacheTransform.LookAt(point);
         float distance = Vector3.Distance(point, transform.position);
-        float speed = .4f * actionSpeed;
+        float speed = .1f * actionSpeed;
         Vector3 scaledVector = ((point - transform.position).normalized);
         int steps = Mathf.FloorToInt(distance / speed);
         for (int i = 0; i < steps; i++)
         {
             cacheTransform.position += (scaledVector * speed);
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
         }
     }
 }
